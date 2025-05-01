@@ -1,3 +1,4 @@
+// APP
 import React, { useEffect, useState, useContext } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import ListContext from "./store/list-context";
@@ -37,7 +38,7 @@ const App = () => {
       const endpoint = "taskIds.json";
       await sendRequest(
         {
-          url: baseUrl + endpoint,
+          url: baseUrl + endpoint
         },
         getTaskIds
       );
@@ -54,7 +55,7 @@ const App = () => {
           loadedTasks.push({
             id: taskObj[property].id,
             text: taskObj[property].text,
-            completed: taskObj[property].completed,
+            completed: taskObj[property].completed
           });
         }
 
@@ -112,7 +113,7 @@ const App = () => {
         url: baseUrl + endpoint,
         method: "PUT",
         body: newTaskIds,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       },
       () => {}
     );
@@ -204,7 +205,7 @@ const App = () => {
         url: baseUrl + endpoint,
         method: "PUT",
         body: newTaskIds,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       },
       () => {}
     );
