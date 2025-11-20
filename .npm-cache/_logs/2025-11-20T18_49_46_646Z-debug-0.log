@@ -1,0 +1,19 @@
+0 verbose cli /Users/lily/.nodebrew/node/v24.1.0/bin/node /Users/lily/.nodebrew/current/bin/npm
+1 info using npm@11.3.0
+2 info using node@v24.1.0
+3 silly config load:file:/Users/lily/.nodebrew/node/v24.1.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/lily/Desktop/to-do-app/.npmrc
+5 silly config load:file:/Users/lily/.npmrc
+6 silly config load:file:/Users/lily/.nodebrew/node/v24.1.0/etc/npmrc
+7 verbose title npm install
+8 verbose argv "install"
+9 verbose logfile logs-max:10 dir:/Users/lily/Desktop/to-do-app/.npm-cache/_logs/2025-11-20T18_49_46_646Z-
+10 verbose logfile /Users/lily/Desktop/to-do-app/.npm-cache/_logs/2025-11-20T18_49_46_646Z-debug-0.log
+11 silly logfile done cleaning log files
+12 verbose cwd /Users/lily/Desktop/to-do-app
+13 verbose os Darwin 24.6.0
+14 verbose node v24.1.0
+15 verbose npm  v11.3.0
+16 verbose exit 1
+17 verbose code 1
+18 error A complete log of this run can be found in: /Users/lily/Desktop/to-do-app/.npm-cache/_logs/2025-11-20T18_49_46_646Z-debug-0.log
