@@ -34,7 +34,7 @@ const App = () => {
 				putTaskIdsArray(taskIds);
 			};
 
-			const baseUrl = process.env.REACT_APP_FIREBASE_URL;
+			const baseUrl = import.meta.env.REACT_APP_FIREBASE_URL;
 			const endpoint = "taskIds.json";
 			await sendRequest(
 				{
@@ -106,7 +106,7 @@ const App = () => {
 		putTaskIdsArray(newTaskIds);
 		setNumOfTasks((prevState) => prevState - 1);
 
-		const baseUrl = process.env.REACT_APP_FIREBASE_URL;
+		const baseUrl = import.meta.env.REACT_APP_FIREBASE_URL;
 		const endpoint = "taskIds.json";
 		sendRequest(
 			{
@@ -198,7 +198,7 @@ const App = () => {
 		newTaskIds.splice(destinationIndex, 0, draggableId);
 		putTaskIdsArray(newTaskIds);
 
-		const baseUrl = process.env.REACT_APP_FIREBASE_URL;
+		const baseUrl = import.meta.env.REACT_APP_FIREBASE_URL;
 		const endpoint = "taskIds.json";
 		sendRequest(
 			{
