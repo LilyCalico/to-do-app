@@ -22,16 +22,14 @@ const App = () => {
 	//----- Load Tasks from DB -----//
 	useEffect(() => {
 		const getTasks = async () => {
-			let taskIds;
+			let taskIds = [];
 
 			const getTaskIds = (inputTaskIds) => {
 				if (!inputTaskIds) {
-					setNumOfTasks(0);
 					return;
 				}
 
 				taskIds = Object.values(inputTaskIds);
-				putTaskIdsArray(taskIds);
 			};
 
 			const baseUrl = import.meta.env.REACT_APP_FIREBASE_URL;
@@ -44,14 +42,13 @@ const App = () => {
 			);
 
 			const transformedTasks = (taskObj) => {
-				if (!taskObj) {
-					return;
-				}
-
 				const loadedTasks = [];
-				const sortedTasks = [];
 
 				for (const property in taskObj) {
+					if (!taskObj[property]) {
+						continue;
+					}
+
 					loadedTasks.push({
 						id: taskObj[property].id,
 						text: taskObj[property].text,
@@ -59,24 +56,19 @@ const App = () => {
 					});
 				}
 
-				if (!taskIds) {
-					setTasks(loadedTasks);
-					return;
-				}
+				// taskIds の順に並べる。tasks に無い ID は捨て、taskIds に無いタスクは末尾に足す
+				const sortedTasks = [...new Set(taskIds)]
+					.map((id) => loadedTasks.find((task) => task.id === id))
+					.filter(Boolean);
+				const unsortedTasks = loadedTasks.filter(
+					(task) => !taskIds.includes(task.id),
+				);
+				const orderedTasks = sortedTasks.concat(unsortedTasks);
 
-				for (const el of taskIds) {
-					const index = loadedTasks.findIndex((item) => item.id === el);
-
-					if (index === -1) {
-						return;
-					}
-
-					const item = loadedTasks[index];
-					sortedTasks.push(item);
-				}
-				setTasks(sortedTasks);
+				setTasks(orderedTasks);
+				putTaskIdsArray(orderedTasks.map((task) => task.id));
 				setNumOfTasks(
-					sortedTasks.filter((task) => task.completed === false).length,
+					orderedTasks.filter((task) => task.completed === false).length,
 				);
 			};
 
@@ -93,13 +85,8 @@ const App = () => {
 	};
 
 	const deleteTaskHandler = (id) => {
-		const taskIndex = tasks.findIndex((task) => task.id === id);
-		const newTasks = Array.from(tasks);
-		newTasks.splice(taskIndex, 1);
-
-		const idIndex = taskIdsArray.findIndex((taskId) => taskId === id);
-		const newTaskIds = Array.from(taskIdsArray);
-		newTaskIds.splice(idIndex, 1);
+		const newTasks = tasks.filter((task) => task.id !== id);
+		const newTaskIds = taskIdsArray.filter((taskId) => taskId !== id);
 
 		sendRequest({ method: "PUT", body: newTasks }, () => {});
 		setTasks(newTasks);
@@ -121,10 +108,26 @@ const App = () => {
 
 	const clearTasksHandler = () => {
 		const remainingTasks = tasks.filter((task) => task.completed === false);
+		const remainingTaskIds = taskIdsArray.filter((taskId) =>
+			remainingTasks.some((task) => task.id === taskId),
+		);
 		sendRequest({ method: "PUT", body: remainingTasks }, () => {});
 		setTasks(remainingTasks);
+		putTaskIdsArray(remainingTaskIds);
 		setNumOfTasks(
 			remainingTasks.filter((task) => task.completed === false).length,
+		);
+
+		const baseUrl = import.meta.env.REACT_APP_FIREBASE_URL;
+		const endpoint = "taskIds.json";
+		sendRequest(
+			{
+				url: baseUrl + endpoint,
+				method: "PUT",
+				body: remainingTaskIds,
+				headers: { "Content-Type": "application/json" },
+			},
+			() => {},
 		);
 	};
 
@@ -216,7 +219,7 @@ const App = () => {
 			const index = tasks.findIndex((item) => item.id === el);
 
 			if (index === -1) {
-				return;
+				continue;
 			}
 
 			const item = tasks[index];
