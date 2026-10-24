@@ -3,9 +3,9 @@ import { useCallback, useState } from "react";
 const useFetch = () => {
   const [err, setError] = useState(null);
 
-  const baseUrl = process.env.REACT_APP_FIREBASE_URL;
+  const baseUrl = import.meta.env.REACT_APP_FIREBASE_URL;
   console.log(baseUrl);
-  console.log(process.env.REACT_APP_SAMPLE);
+  console.log(import.meta.env.REACT_APP_SAMPLE);
   const endpoint = "tasks.json";
   const url = baseUrl + endpoint;
 
